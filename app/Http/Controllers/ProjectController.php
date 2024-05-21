@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -14,7 +15,14 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $query = Project::query();
+        $projects = $query->paginate(10)->onEachSide(1);
+
+        // GOOD PRACTISE: Create resource on what data only should be passed on browser.
+        //                Unlike Blade, when resoure is not created in Inertia, it will pass all data to the browser which is not safe!   
+        return inertia("Project/Index", [
+            "projects" => ProjectResource::collection($projects),
+        ]);
     }
 
     /**
