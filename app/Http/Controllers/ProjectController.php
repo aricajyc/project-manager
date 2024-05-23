@@ -16,12 +16,21 @@ class ProjectController extends Controller
     public function index()
     {
         $query = Project::query();
+
+        if (request('name')) {
+            $query->where('name','like','%'. request('name') .'%');
+        }
+
+        if (request('status')) {
+            $query->where('status', request('status'));
+        }
         $projects = $query->paginate(10)->onEachSide(1);
 
         // GOOD PRACTISE: Create resource on what data only should be passed on browser.
         //                Unlike Blade, when resoure is not created in Inertia, it will pass all data to the browser which is not safe!   
         return inertia("Project/Index", [
             "projects" => ProjectResource::collection($projects),
+            'queryParams' => request()->query() ? : null,
         ]);
     }
 
