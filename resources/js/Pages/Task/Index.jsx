@@ -2,11 +2,11 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
+import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 
-export default function Index({ auth, projects, queryParams = null }) {
+export default function Index({ auth, tasks, queryParams = null }) {
     queryParams = queryParams || {};
     const searchFieldChanged = (name, value) => {
         if (value) {
@@ -15,7 +15,7 @@ export default function Index({ auth, projects, queryParams = null }) {
             delete queryParams[name];
         }
 
-        router.get(route("project.index"), queryParams);
+        router.get(route("task.index"), queryParams);
     };
 
     const onKeyPress = (name, e) => {
@@ -35,7 +35,7 @@ export default function Index({ auth, projects, queryParams = null }) {
             queryParams.sort_field = name;
             queryParams.sort_direction = "asc";
         }
-        router.get(route("project.index"), queryParams);
+        router.get(route("task.index"), queryParams);
     };
 
     return (
@@ -43,11 +43,11 @@ export default function Index({ auth, projects, queryParams = null }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    Projects
+                    Tasks
                 </h2>
             }
         >
-            <Head title="Projects" />
+            <Head title="Tasks" />
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -136,7 +136,7 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                     defaultValue={
                                                         queryParams.name
                                                     }
-                                                    placeholder="Project Name"
+                                                    placeholder="Task Name"
                                                     onBlur={(e) =>
                                                         searchFieldChanged(
                                                             "name",
@@ -180,68 +180,61 @@ export default function Index({ auth, projects, queryParams = null }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {projects.data.map((project) => (
+                                        {tasks.data.map((task) => (
                                             <tr
                                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                                                key={project.id}
+                                                key={task.id}
                                             >
                                                 <td className="px-3 py-2 text-center">
-                                                    {project.id}{" "}
-                                                    {/*PROJECT ID*/}
+                                                    {task.id}{" "}
+                                                    {/*TASK ID*/}
                                                 </td>
                                                 <td className="px-3 py-2 place-content-center">
                                                     <img
-                                                        src={project.image_path}
+                                                        src={task.image_path}
                                                         alt=""
                                                         style={{ width: 60 }}
                                                     />{" "}
-                                                    {/*PROJECT IMAGE PATH*/}
+                                                    {/*TASK IMAGE PATH*/}
                                                 </td>
                                                 <td className="px-3 py-2 hover:font-medium">
-                                                    <Link
-                                                        href={route(
-                                                            "project.show",
-                                                            project.id
-                                                        )}
-                                                    >
-                                                        {project.name}
-                                                    </Link>
-                                                    {/*PROJECT NAME*/}
+                                                    {task.name}{" "}
+                                                    {/*TASK NAME*/}
                                                 </td>
                                                 <td className="px-3 py-2 text-center">
                                                     <span
                                                         className={
                                                             "px-2 py-1 rounded-full text-white " +
-                                                            PROJECT_STATUS_CLASS_MAP[
-                                                                project.status
+                                                            TASK_STATUS_CLASS_MAP[
+                                                                task.status
                                                             ]
                                                         }
                                                     >
                                                         {
-                                                            PROJECT_STATUS_TEXT_MAP[
-                                                                project.status
+                                                            TASK_STATUS_TEXT_MAP[
+                                                                task.status
                                                             ]
                                                         }{" "}
-                                                        {/*PROJECT STATUS*/}
+                                                        {/*TASK STATUS*/}
                                                     </span>
                                                 </td>
                                                 <td className="px-3 py-2 text-nowrap text-center">
-                                                    {project.created_at}{" "}
-                                                    {/*PROJECT CREATED AT*/}
+                                                    {task.created_at}{" "}
+                                                    {/*TASK CREATED AT*/}
                                                 </td>
                                                 <td className="px-3 py-2 text-nowrap text-center">
-                                                    {project.due_date}{" "}
-                                                    {/*PROJECT DUE DATE*/}
+                                                    {task.due_date}{" "}
+                                                    {/*TASK DUE DATE*/}
                                                 </td>
                                                 <td className="px-3 py-2 text-center">
-                                                    {project.createdBy.name}{" "}
-                                                    {/*PROJECT CREATED BY*/}
+                                                    {task.createdBy.name}{" "}
+                                                    {/*TASK CREATED BY*/}
                                                 </td>
                                                 <td className="px-3 py-2 text-center">
                                                     <Link
                                                         href={route(
-                                                            "project.edit",
-                                                            project.id
+                                                            "task.edit",
+                                                            task.id
                                                         )}
                                                         className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                                                     >
@@ -249,8 +242,8 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                     </Link>
                                                     <Link
                                                         href={route(
-                                                            "project.destroy",
-                                                            project.id
+                                                            "task.destroy",
+                                                            task.id
                                                         )}
                                                         className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                                                     >
@@ -263,7 +256,7 @@ export default function Index({ auth, projects, queryParams = null }) {
                                 </table>
                             </div>
 
-                            <Pagination links={projects.meta.links} />
+                            <Pagination links={tasks.meta.links} />
                         </div>
                     </div>
                 </div>
