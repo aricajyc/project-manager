@@ -197,7 +197,7 @@ export default function Index({ auth, projects, queryParams = null }) {
                                                     />{" "}
                                                     {/*PROJECT IMAGE PATH*/}
                                                 </td>
-                                                <td className="px-3 py-2 hover:font-medium">
+                                                <td className="px-3 py-2 hover:underline">
                                                     <Link
                                                         href={route(
                                                             "project.show",

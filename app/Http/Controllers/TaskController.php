@@ -26,6 +26,7 @@ class TaskController extends Controller
         if (request('status')) {
             $query->where('status', request('status'));
         }
+        
         $tasks = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
